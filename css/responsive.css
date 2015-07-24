@@ -1,0 +1,7 @@
+@media screen and (max-width: 1000px) {
+	.main {
+		margin-left: 10vh;
+		margin-right: 10vh;
+		margin-top: 10vh;
+	}
+}

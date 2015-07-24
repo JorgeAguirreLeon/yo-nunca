@@ -1,0 +1,78 @@
+html * {
+	font-family: 'Coming Soon', cursive;
+	color: white;
+}
+
+body {
+	margin: 0px;
+	border: 0px;
+	background-color: #282723;
+}
+
+.header {
+	height: 14vh;
+}
+
+.menu-options {
+	height: 14vh;
+	float: right;
+}
+
+.menu-options .fa-settings {
+	border: 1px solid #333;
+	border-right: 0;
+	color: #333;
+	font-size: 8vh;
+	padding: 3vh;
+}
+
+.menu-options .fa-settings:last-child; {
+	border-right: 1px;
+}
+
+.fa-settings:hover {
+	cursor:pointer;
+}
+
+.fa-settings.active {
+	color: #888;
+}
+
+.intro {
+	font-size: 7vmin;
+	margin-left: 5vw;
+}
+
+.main {
+	font-size: 8vmin;
+	margin-left: 20vw;
+	margin-right: 20vw;
+	margin-top: 10vh;
+	position: relative;
+}
+
+.next {
+	bottom: 3vh;
+	position: absolute;
+	width: 100%;
+}
+
+.next-button {
+	background-color: rgba(0,0,0,0);
+	border: 1px solid #aaa;
+	border-radius: 10px;
+	float: right;
+	font-size: 30px;
+	margin-right: 8vw;
+	outline: none;
+	padding: 15px 40px;
+}
+
+.next-button:hover {
+	cursor: pointer;
+}
+
+.next-button:active {
+	background-color: rgba(0,0,0,0.2);
+	border-color: 1px solid #ddd;
+}
