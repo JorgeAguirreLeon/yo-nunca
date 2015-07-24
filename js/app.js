@@ -1,14 +1,16 @@
 $(document).ready(function() {
 
+	var host = "http://localhost:5000";//http://api.rabofetada.com/yo-nunca";
+
+	load_latest();
+
 	$("#next").click(function() {
-		var request = $.get("http://api.rabofetada.com/yo-nunca/v1/random");
+		var request = $.get(host + "/v1/random");
 		request.done(function(data) {
-			console.log(data);
-			$("#content").text("me he follado a una vaca")
+			$("#content").text(data.sentence)
 		});
 		request.fail(function(error) {
 			console.log(error);
-			$("#content").text("me he follado a una vaca")
 		});
 	});
 
@@ -36,4 +38,15 @@ $(document).ready(function() {
 	$("#random").click(function() {
 		$("#random").toggleClass("active");
 	})
+
+	function load_latest() {
+		var request = $.get(host + "/v1/latest");
+		request.done(function(data) {
+			console.log(data);
+			$("#content").text(data.sentence)
+		});
+		request.fail(function(error) {
+			console.log(error);
+		});
+	}
 });
