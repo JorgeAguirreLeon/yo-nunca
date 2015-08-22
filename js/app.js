@@ -2,36 +2,40 @@ $(document).ready(function() {
 
 	var host = "http://localhost:5000";//http://api.rabofetada.com/yo-nunca";
 
+	var latest_id = null;
+
 	load_latest();
 
 	$("#next").click(function() {
-		var request = $.get(host + "/v1/random");
-		request.done(function(data) {
-			$("#content").text(data.sentence)
-		});
-		request.fail(function(error) {
-			console.log(error);
-		});
+		if ($("#random").hasClass("active")) {
+			var request = $.get(host + "/v1/random");
+			request.done(function(data) {
+				latest_id = data._id;
+				$("#content").text(data.sentence);
+			});
+			request.fail(function(error) {
+				console.log(error);
+			});
+		}
+		else {
+			var request = $.get(host + "/v1/next?current_id=" + latest_id);
+			request.done(function(data) {
+				latest_id = data._id;
+				$("#content").text(data.sentence);
+			});
+			request.fail(function(error) {
+				console.log(error);
+			});
+		}
 	});
 
-	var audio;
 	$("#audio").click(function() {
 		if ($("#audio").hasClass("active")) {
-			audio.pause();
-			audio.currentTime = 0;
-			$("#audio").removeClass("active");
+			cancel_audio();
 		}
 		else {
 			$("#audio").addClass("active");
-			audio = document.createElement('audio');
-			var text = "yo nunca " + $("#content").text();
-			var q_string = encodeURIComponent(text);
-			audio.src ='http://translate.google.com/translate_tts?ie=utf-8&tl=es&q=' + q_string;
-			audio.playbackRate = 1.35;
-			audio.play();
-			audio.addEventListener("ended", function() {
-				$("#audio").removeClass("active");
-			});
+			responsiveVoice.speak("yo nunca " + $("#content").text(), "Spanish Female", {onend: cancel_audio});
 		}
 	});
 
@@ -43,10 +47,17 @@ $(document).ready(function() {
 		var request = $.get(host + "/v1/latest");
 		request.done(function(data) {
 			console.log(data);
-			$("#content").text(data.sentence)
+			$("#content").text(data.sentence);
+			latest_id = data._id;
 		});
 		request.fail(function(error) {
 			console.log(error);
 		});
 	}
+
+	function cancel_audio() {
+		responsiveVoice.cancel();
+		$("#audio").removeClass("active");
+	}
+
 });
