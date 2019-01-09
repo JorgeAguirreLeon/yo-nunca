@@ -10,24 +10,23 @@ body {
 }
 
 .header {
-	height: 14vh;
+	padding: 6px;
 }
 
 .menu-options {
-	height: 14vh;
-	float: right;
+	text-align: right;
+	font-size: 0;
 }
 
 .menu-options .fa-settings {
-	border: 1px solid #333;
-	border-right: 0;
-	color: #333;
+	border: 1px solid #777;
+	color: #777;
 	font-size: 8vh;
-	padding: 3vh;
+	padding: 18px 24px;
 }
 
-.menu-options .fa-settings:last-child; {
-	border-right: 1px;
+.menu-options .fa-settings:first-of-type {
+	border-right: 0px;
 }
 
 .fa-settings:hover {
@@ -35,7 +34,7 @@ body {
 }
 
 .fa-settings.active {
-	color: #888;
+	color: white;
 }
 
 .intro {
@@ -52,18 +51,17 @@ body {
 }
 
 .next {
-	bottom: 3vh;
-	position: absolute;
-	width: 100%;
+	position: fixed;
+	bottom: 25px;
+	right: 25px;
 }
 
 .next-button {
 	background-color: rgba(0,0,0,0);
 	border: 1px solid #aaa;
 	border-radius: 10px;
-	float: right;
+	text-align: right;
 	font-size: 30px;
-	margin-right: 8vw;
 	outline: none;
 	padding: 15px 40px;
 }

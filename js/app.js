@@ -1,63 +1,59 @@
-$(document).ready(function() {
+// Data
+const sentences = [
+	'he jugado al ajedrez',
+	'he roto un vaso',
+	'he llamado mamá/papá a un/a profesor/a'
+]
 
-	var host = "http://localhost:5000";//http://api.rabofetada.com/yo-nunca";
+let current_index = 0
 
-	var latest_id = null;
+// Useful functions
+const getNextSentence = ()=> {
+	const sentence = sentences[current_index]
+	current_index++
+	if (current_index >= sentences.length) current_index = 0
+	return sentence
+}
 
-	load_latest();
+const getRandomSentence = ()=> {
+	const random_index = Math.floor(Math.random()*sentences.length)
+	current_index = random_index+1
+	return sentences[random_index]
+}
 
-	$("#next").click(function() {
-		if ($("#random").hasClass("active")) {
-			var request = $.get(host + "/v1/random");
-			request.done(function(data) {
-				latest_id = data._id;
-				$("#content").text(data.sentence);
-			});
-			request.fail(function(error) {
-				console.log(error);
-			});
-		}
-		else {
-			var request = $.get(host + "/v1/next?current_id=" + latest_id);
-			request.done(function(data) {
-				latest_id = data._id;
-				$("#content").text(data.sentence);
-			});
-			request.fail(function(error) {
-				console.log(error);
-			});
-		}
-	});
+// DOM Elements
+const next = document.querySelector('#next')
+const random = document.querySelector('#random')
+const voice = document.querySelector('#audio')
+const content = document.querySelector('#content')
 
-	$("#audio").click(function() {
-		if ($("#audio").hasClass("active")) {
-			cancel_audio();
-		}
-		else {
-			$("#audio").addClass("active");
-			responsiveVoice.speak("yo nunca " + $("#content").text(), "Spanish Female", {onend: cancel_audio});
-		}
-	});
+// TTS checking
+if (!('speechSynthesis' in window)) {
+	voice.className += ' disabled'
+}
 
-	$("#random").click(function() {
-		$("#random").toggleClass("active");
-	})
+next.onclick = ()=> {
+	const sentence = random.className.includes('active') ? getRandomSentence() : getNextSentence()
+	content.textContent = sentence
+}
 
-	function load_latest() {
-		var request = $.get(host + "/v1/latest");
-		request.done(function(data) {
-			console.log(data);
-			$("#content").text(data.sentence);
-			latest_id = data._id;
-		});
-		request.fail(function(error) {
-			console.log(error);
-		});
+voice.onclick = ()=> {
+	if (voice.className.includes('disabled')) return
+	if (voice.className.includes('active')) {
+		window.speechSynthesis.cancel()
 	}
-
-	function cancel_audio() {
-		responsiveVoice.cancel();
-		$("#audio").removeClass("active");
+	else {
+		voice.className += ' active'
+		const voices = window.speechSynthesis.getVoices().filter(voice=> voice.lang === 'es-ES')
+		const random_index = Math.floor(Math.random()*voices.length)
+		const utterance = new SpeechSynthesisUtterance(`yo nunca ${content.textContent}`)
+	  utterance.voice = voices[random_index]
+	  utterance.onend = event=> voice.classList.remove('active')
+		utterance.onerror = event=> voice.classList.remove('active')
+		window.speechSynthesis.speak(utterance)
 	}
+}
 
-});
+random.onclick = ()=> random.classList.toggle('active')
+
+next.onclick()
